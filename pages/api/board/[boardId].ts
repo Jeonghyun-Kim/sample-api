@@ -7,7 +7,7 @@ const handler: (
   req: NextApiRequest,
   res: NextApiResponse,
 ) => Promise<void> = async (req, res) => {
-  if (req.method === 'PUT') {
+  if (req.method === 'PATCH') {
     const { boardId } = req.query;
     const { title, name, content } = req.body;
 
@@ -24,6 +24,19 @@ const handler: (
         },
       },
     );
+
+    if (!result.ok)
+      return res.status(500).json({ status: 'db connection error.' });
+
+    return res.json({ status: 'ok' });
+  }
+
+  if (req.method === 'DELETE') {
+    const { boardId } = req.query;
+
+    const { db } = await connectMongo();
+
+    const { result } = await db.collection('board').deleteOne({ _id: boardId });
 
     if (!result.ok)
       return res.status(500).json({ status: 'db connection error.' });
