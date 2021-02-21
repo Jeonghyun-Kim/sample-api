@@ -6,14 +6,12 @@ const handler: (
   res: NextApiResponse,
 ) => Promise<void> = async (req, res) => {
   if (req.method === 'GET') {
-    // Do something whatever you want
-
     // Making 1sec delay for better practice.
     await new Promise((resolve) => {
       setTimeout(() => resolve(true), 1000);
     });
 
-    return res.json({ data: { hello: 'world' } });
+    return res.json({ status: 'ok' });
   }
 
   res.statusCode = 404;
