@@ -20,6 +20,9 @@ const handler: (
 
   if (req.method === 'POST') {
     const { title, content, name } = req.body;
+    if (!title || !content || !name)
+      return res.status(400).json({ error: 'empty content.' });
+
     const { db } = await connectMongo();
 
     const { result, insertedId } = await db.collection('board').insertOne({
