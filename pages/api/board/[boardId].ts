@@ -36,7 +36,9 @@ const handler: (
 
     const { db } = await connectMongo();
 
-    const { result } = await db.collection('board').deleteOne({ _id: boardId });
+    const { result } = await db
+      .collection('board')
+      .deleteOne({ _id: new ObjectId(boardId as string) });
 
     if (!result.ok)
       return res.status(500).json({ status: 'db connection error.' });
