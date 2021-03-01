@@ -49,8 +49,7 @@ const handler: (
     return res.json({ guestBookId: insertedId });
   }
 
-  res.statusCode = 404;
-  throw new Error('Method not found.');
+  return res.status(404).send('method not found.');
 };
 
 export default withErrorHandler(handler);

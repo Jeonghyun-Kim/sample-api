@@ -21,27 +21,25 @@ const handler: (
   if (req.method === 'POST') {
     const { title, content, name } = req.body;
     if (!title || !content || !name)
-      return res.status(400).json({ error: 'empty content.' });
+      return res.status(400).send('empty content.');
 
     const { db } = await connectMongo();
 
     const { result, insertedId } = await db.collection('board').insertOne({
-      title: title ?? null,
-      content: content ?? null,
-      name: name ?? null,
+      title: title || null,
+      content: content || null,
+      name: name || null,
       verified: true,
       created: new Date(),
       lastUpdated: new Date(),
     });
 
-    if (!result.ok)
-      return res.status(500).json({ error: 'db connection failed.' });
+    if (!result.ok) return res.status(500).send('db connection failed.');
 
     return res.json({ boardId: insertedId });
   }
 
-  res.statusCode = 404;
-  throw new Error('Method not found.');
+  return res.status(404).send('method not found.');
 };
 
 export default withErrorHandler(handler);

@@ -37,14 +37,12 @@ const handler: (
       },
     );
 
-    if (!result.ok)
-      return res.status(500).json({ error: 'db connection failed.' });
+    if (!result.ok) return res.status(500).send('db connection failed.');
 
     return res.status(204).end();
   }
 
-  res.statusCode = 404;
-  throw new Error('Method not found.');
+  return res.status(404).send('method not found.');
 };
 
 export default withErrorHandler(handler);

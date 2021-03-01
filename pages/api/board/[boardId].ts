@@ -25,8 +25,7 @@ const handler: (
       },
     );
 
-    if (!result.ok)
-      return res.status(500).json({ status: 'db connection error.' });
+    if (!result.ok) return res.status(500).send('db connection error.');
 
     return res.json({ status: 'ok' });
   }
@@ -40,14 +39,12 @@ const handler: (
       .collection('board')
       .deleteOne({ _id: new ObjectId(boardId as string) });
 
-    if (!result.ok)
-      return res.status(500).json({ status: 'db connection error.' });
+    if (!result.ok) return res.status(500).send('db connection error.');
 
     return res.json({ status: 'ok' });
   }
 
-  res.statusCode = 404;
-  throw new Error('Method not found.');
+  return res.status(404).send('method not found.');
 };
 
 export default withErrorHandler(handler);
