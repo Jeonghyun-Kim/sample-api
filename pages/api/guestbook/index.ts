@@ -29,24 +29,22 @@ const handler: (
   if (req.method === 'POST') {
     const { title, content, name, password } = req.body;
     if (!title || !content || !name || !password)
-      return res.status(400).json({ error: 'missing required fields.' });
+      return res.status(400).send('missing required fields.');
 
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const { db } = await connectMongo();
 
-    const { result, insertedId } = await db.collection('board').insertOne({
+    const { result, insertedId } = await db.collection('guestBook').insertOne({
       title: title || null,
       content: content || null,
       name: name || null,
       password: hashedPassword,
-      verified: true,
       created: new Date(),
       lastUpdated: new Date(),
     });
 
-    if (!result.ok)
-      return res.status(500).json({ error: 'db connection failed.' });
+    if (!result.ok) return res.status(500).send('db connection failed.');
 
     return res.json({ guestBookId: insertedId });
   }
