@@ -1,4 +1,5 @@
 import { NextApiRequest, NextApiResponse } from 'next';
+import sha256 from 'sha256';
 import withErrorHandler from '@utils/withErrorHandler';
 import connectMongo from '@utils/connectMongo';
 
@@ -19,8 +20,8 @@ const handler: (
   }
 
   if (req.method === 'POST') {
-    const { title, content, name } = req.body;
-    if (!title || !content || !name)
+    const { title, content, name, password } = req.body;
+    if (!title || !content || !name || !password)
       return res.status(400).send('empty content.');
 
     const { db } = await connectMongo();
@@ -29,6 +30,7 @@ const handler: (
       title: title || null,
       content: content || null,
       name: name || null,
+      password: sha256(password),
       verified: true,
       created: new Date(),
       lastUpdated: new Date(),
